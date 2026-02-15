@@ -19,7 +19,7 @@ export default async function BlogPage() {
       <p className="text-zinc-500 dark:text-zinc-400 mb-8">
         Практичные статьи о нейросетях, промптах и AI-инструментах
       </p>
-      <div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {(posts ?? []).map((post) => (
           <PostCard
             key={post.slug}

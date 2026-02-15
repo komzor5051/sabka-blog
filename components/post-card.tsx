@@ -12,20 +12,20 @@ export function PostCard({ slug, title, metaDesc, publishedAt, tags }: PostCardP
   });
 
   return (
-    <article className="mb-4">
+    <article>
       <a
         href={`/blog/${slug}`}
-        className="group block rounded-xl border border-zinc-200 dark:border-zinc-800 p-6 transition-all hover:border-zinc-400 dark:hover:border-zinc-600 hover:shadow-md"
+        className="group flex flex-col h-full rounded-xl border border-zinc-200 dark:border-zinc-800 p-5 transition-all hover:border-zinc-400 dark:hover:border-zinc-600 hover:shadow-md"
       >
-        <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100 group-hover:text-blue-500 transition-colors">
+        <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100 group-hover:text-blue-500 transition-colors line-clamp-2">
           {title}
         </h2>
         {metaDesc && (
-          <p className="mt-3 text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed line-clamp-2">
+          <p className="mt-2 text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed line-clamp-3 flex-1">
             {metaDesc}
           </p>
         )}
-        <div className="mt-4 flex flex-wrap items-center gap-2 text-xs text-zinc-400">
+        <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-zinc-400">
           <time>{date}</time>
           <span className="text-zinc-300 dark:text-zinc-700">·</span>
           {tags.slice(0, 3).map((tag) => (
