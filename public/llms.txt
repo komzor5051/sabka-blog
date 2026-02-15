@@ -1,0 +1,27 @@
+# Sabka Blog
+
+> Блог сервиса Сабка (sabka.pro) — мультичат с AI моделями без VPN
+
+## About
+
+Практичные статьи о работе с нейросетями: ChatGPT, Claude, Gemini, DeepSeek.
+Сравнения моделей, гайды по промптам, кейсы автоматизации.
+
+## URL
+
+- Blog: https://sabka-blog.vercel.app/blog
+- RSS: https://sabka-blog.vercel.app/blog/feed.xml
+- Sitemap: https://sabka-blog.vercel.app/blog/sitemap.xml
+- Main product: https://sabka.pro
+
+## Topics
+
+- AI model comparisons (ChatGPT vs Claude vs Gemini)
+- Prompt engineering guides
+- AI automation use cases
+- Multichat workflows
+- AI tools for business
+
+## Language
+
+Primary: Russian (ru)
