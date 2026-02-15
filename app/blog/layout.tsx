@@ -9,7 +9,7 @@ export default function BlogLayout({ children }: { children: React.ReactNode }) 
   return (
     <div className="min-h-screen bg-white dark:bg-zinc-950">
       <header className="border-b border-zinc-200 dark:border-zinc-800">
-        <div className="max-w-3xl mx-auto px-4 py-6 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between">
           <a href="/blog" className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
             Блог Сабки
           </a>
@@ -21,7 +21,7 @@ export default function BlogLayout({ children }: { children: React.ReactNode }) 
           </a>
         </div>
       </header>
-      <main className="max-w-3xl mx-auto px-4 py-8">{children}</main>
+      <main className="max-w-6xl mx-auto px-6 py-8">{children}</main>
     </div>
   );
 }

@@ -17,7 +17,7 @@ export function PostCard({ slug, title, metaDesc, publishedAt, tags }: PostCardP
         href={`/blog/${slug}`}
         className="group flex flex-col h-full rounded-xl border border-zinc-200 dark:border-zinc-800 p-5 transition-all hover:border-zinc-400 dark:hover:border-zinc-600 hover:shadow-md"
       >
-        <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100 group-hover:text-blue-500 transition-colors line-clamp-2">
+        <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100 group-hover:text-blue-500 transition-colors">
           {title}
         </h2>
         {metaDesc && (
