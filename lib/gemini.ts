@@ -19,7 +19,7 @@ export async function generateText(
 }
 
 export async function generatePro(prompt: string): Promise<string> {
-  return generateText(prompt, { model: "gemini-2.0-pro", temperature: 0.8, maxTokens: 16384 });
+  return generateText(prompt, { model: "gemini-2.0-flash", temperature: 0.8, maxTokens: 16384 });
 }
 
 export async function generateFlash(prompt: string): Promise<string> {
