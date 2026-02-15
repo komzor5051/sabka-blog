@@ -11,7 +11,7 @@ export async function POST(request: Request) {
   // Simple secret check
   const { searchParams } = new URL(request.url);
   const secret = searchParams.get("secret");
-  if (secret !== process.env.SUPABASE_SERVICE_KEY?.slice(-10)) {
+  if (secret !== "sabka2026go") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
