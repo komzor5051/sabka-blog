@@ -7,7 +7,7 @@ const MEME_PLACEHOLDER_REGEX = /!\[MEME:\s*(.+?)\]\(placeholder\)/g;
 
 async function generateImage(prompt: string): Promise<Buffer> {
   const response = await genAI.models.generateContent({
-    model: "gemini-2.5-flash-preview-05-20",
+    model: "gemini-3-pro-image-preview",
     contents: prompt,
     config: {
       responseModalities: ["IMAGE", "TEXT"],
@@ -45,7 +45,18 @@ async function uploadToStorage(
 }
 
 function buildPrompt(description: string): string {
-  return `Generate an illustration for a tech blog article. The scene: ${description}. Style: modern, clean, professional editorial illustration. NO text, NO letters, NO words on the image. High quality, 16:9 aspect ratio.`;
+  return `Создай мем-картинку для IT/AI блога.
+
+Описание сцены: ${description}
+
+Требования:
+- Стиль: яркий мультяшный мем как в Rick and Morty — насыщенные цвета, выразительные персонажи, гротескные эмоции
+- Если в описании есть "подпись" — нарисуй этот текст НА РУССКОМ ЯЗЫКЕ крупным жирным шрифтом прямо на картинке (сверху или снизу, как в классических мемах)
+- Текст на картинке должен быть ЧИТАЕМЫМ: белые буквы с чёрной обводкой, крупный размер
+- Персонажи — гротескные, смешные, с утрированными эмоциями
+- IT/технологическая тематика: компьютеры, роботы, нейросети, код
+- Формат 16:9
+- Картинка должна быть СМЕШНОЙ и понятной без контекста`;
 }
 
 export async function generateArticleImages(
