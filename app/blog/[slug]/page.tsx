@@ -126,7 +126,7 @@ export default async function ArticlePage({ params }: Props) {
         </header>
 
         {/* Two-column: TOC + Content */}
-        <div className="flex gap-10">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
           {/* TOC (handles mobile/desktop internally) */}
           <TableOfContents html={contentHtml} />
 
@@ -139,7 +139,7 @@ export default async function ArticlePage({ params }: Props) {
 
             {/* Prev/Next */}
             {(prev || next) && (
-              <nav className="mt-12 grid grid-cols-2 gap-4 text-sm">
+              <nav className="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                 {prev ? (
                   <a
                     href={`/blog/${prev.slug}`}
@@ -170,7 +170,7 @@ export default async function ArticlePage({ params }: Props) {
             )}
 
             {/* CTA */}
-            <div className="mt-12 p-6 bg-[var(--accent-light)] rounded-xl border border-[var(--accent)]/20 text-center">
+            <div className="mt-10 p-4 sm:p-6 bg-[var(--accent-light)] rounded-xl border border-[var(--accent)]/20 text-center">
               <p className="text-lg font-semibold text-zinc-900 dark:text-zinc-100 mb-2">
                 Попробуйте Сабку бесплатно
               </p>

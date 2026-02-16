@@ -55,25 +55,25 @@ export function TableOfContents({ html }: { html: string }) {
   return (
     <>
       {/* Mobile: collapsible */}
-      <nav className="lg:hidden mb-6" aria-label="Оглавление">
+      <nav className="lg:hidden mb-4" aria-label="Оглавление">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center gap-2 text-sm font-semibold text-zinc-900 dark:text-zinc-100 w-full py-3 px-4 bg-zinc-50 dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800"
+          className="flex items-center gap-2 text-xs font-semibold tracking-wider text-zinc-900 dark:text-zinc-100 w-full py-2.5 px-3 bg-zinc-50 dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800"
         >
-          <svg className={`w-4 h-4 transition-transform ${isOpen ? "rotate-90" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className={`w-3.5 h-3.5 transition-transform ${isOpen ? "rotate-90" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
           ОГЛАВЛЕНИЕ
         </button>
         {isOpen && (
-          <ul className="mt-2 space-y-1 px-4 pb-3 bg-zinc-50 dark:bg-zinc-900 rounded-b-lg border border-t-0 border-zinc-200 dark:border-zinc-800">
+          <ul className="mt-1 space-y-0.5 px-2 pb-2 bg-zinc-50 dark:bg-zinc-900 rounded-b-lg border border-t-0 border-zinc-200 dark:border-zinc-800">
             {items.map((item) => (
               <li key={item.id}>
                 <a
                   href={`#${item.id}`}
                   onClick={() => setIsOpen(false)}
-                  className={`block py-1.5 text-sm transition-colors ${
-                    item.level === 3 ? "pl-4" : ""
+                  className={`block py-1 text-[13px] leading-snug transition-colors ${
+                    item.level === 3 ? "pl-3" : ""
                   } ${
                     activeId === item.id
                       ? "text-[var(--accent)] font-medium"
