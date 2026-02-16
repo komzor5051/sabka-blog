@@ -19,5 +19,18 @@ export function slugify(text: string): string {
 }
 
 export function renderMarkdown(md: string): string {
-  return marked.parse(md, { async: false }) as string;
+  const renderer = new marked.Renderer();
+  const headingIds = new Map<string, number>();
+
+  renderer.heading = ({ text, depth }: { text: string; depth: number }) => {
+    const plain = text.replace(/<[^>]*>/g, "");
+    let id = slugify(plain);
+    // Deduplicate IDs
+    const count = headingIds.get(id) ?? 0;
+    headingIds.set(id, count + 1);
+    if (count > 0) id = `${id}-${count}`;
+    return `<h${depth} id="${id}">${text}</h${depth}>\n`;
+  };
+
+  return marked.parse(md, { async: false, renderer }) as string;
 }

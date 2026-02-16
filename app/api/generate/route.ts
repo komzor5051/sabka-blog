@@ -3,7 +3,9 @@ import { supabase } from "@/lib/supabase";
 import { searchSources } from "@/lib/researcher";
 import { writeArticle } from "@/lib/pipeline/writer";
 import { runAllEditors } from "@/lib/pipeline/editors";
+import { generateArticleImages } from "@/lib/pipeline/image-generator";
 import { publishPost } from "@/lib/pipeline/publisher";
+import { slugify } from "@/lib/utils";
 
 export const maxDuration = 300;
 
@@ -35,7 +37,7 @@ export async function POST(request: Request) {
       6
     );
 
-    // 3. Write draft
+    // 3. Write draft (with image placeholders)
     const draft = await writeArticle({
       title: topic.title,
       angle: topic.angle ?? "",
@@ -46,12 +48,20 @@ export async function POST(request: Request) {
     // 4. Edit (4 passes)
     const edited = await runAllEditors(draft);
 
-    // 5. Publish
+    // 5. Generate images
+    const articleSlug = slugify(topic.title);
+    const { markdown: withImages, coverImage } = await generateArticleImages(
+      edited,
+      articleSlug
+    );
+
+    // 6. Publish
     const slug = await publishPost({
       topicId: topic.id,
       title: topic.title,
-      content: edited,
+      content: withImages,
       tags: topic.keywords ?? [],
+      coverImage,
     });
 
     return NextResponse.json({
@@ -59,6 +69,7 @@ export async function POST(request: Request) {
       slug,
       title: topic.title,
       url: `/blog/${slug}`,
+      imagesGenerated: !!coverImage,
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
