@@ -47,7 +47,7 @@ async function uploadToStorage(
 }
 
 function buildImagenPrompt(russianDescription: string): string {
-  return `Digital illustration in cartoon/comic meme style, vibrant colors, bold outlines. The scene: ${russianDescription}. Include text overlay in Cyrillic Russian on the image. Style: funny internet meme, editorial illustration for a tech blog. High quality, clean composition, 16:9 aspect ratio.`;
+  return `Digital illustration, modern flat style with vibrant colors. The scene: ${russianDescription}. NO text, NO letters, NO words on the image. Style: clean editorial illustration for a tech blog. High quality, 16:9 aspect ratio.`;
 }
 
 export async function generateArticleImages(

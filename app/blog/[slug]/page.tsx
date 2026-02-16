@@ -125,15 +125,10 @@ export default async function ArticlePage({ params }: Props) {
           </div>
         </header>
 
-        {/* Mobile TOC */}
-        <TableOfContents html={contentHtml} />
-
         {/* Two-column: TOC + Content */}
         <div className="flex gap-10">
-          {/* Desktop TOC (sticky sidebar) */}
-          <div className="hidden lg:block">
-            <TableOfContents html={contentHtml} />
-          </div>
+          {/* TOC (handles mobile/desktop internally) */}
+          <TableOfContents html={contentHtml} />
 
           {/* Article content */}
           <div className="min-w-0 flex-1">
