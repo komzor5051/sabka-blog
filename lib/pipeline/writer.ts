@@ -1,5 +1,6 @@
 import { generatePro } from "@/lib/gemini";
 import { Source } from "@/lib/researcher";
+import { supabase } from "@/lib/supabase";
 import { SABKA_STYLE_GUIDE } from "./style-guide";
 
 interface WriterInput {
@@ -9,14 +10,45 @@ interface WriterInput {
   sources: Source[];
 }
 
+async function getExistingArticles(): Promise<string> {
+  const { data } = await supabase
+    .from("blog_posts")
+    .select("title, slug")
+    .eq("status", "published")
+    .order("published_at", { ascending: false })
+    .limit(30);
+
+  if (!data || data.length === 0) return "";
+
+  const blogUrl = process.env.BLOG_URL || "https://sabka-blog.vercel.app";
+  return data
+    .map((p) => `- [${p.title}](${blogUrl}/blog/${p.slug})`)
+    .join("\n");
+}
+
 export async function writeArticle(input: WriterInput): Promise<string> {
   const sourcesContext = input.sources
     .map((s) => `[${s.title}](${s.url}): ${s.summary}`)
     .join("\n\n");
 
+  const existingArticles = await getExistingArticles();
+
   const today = new Date().toLocaleDateString("ru-RU", {
     year: "numeric", month: "long", day: "numeric",
   });
+
+  const internalLinksBlock = existingArticles
+    ? `\nВНУТРЕННИЕ ССЫЛКИ (ОБЯЗАТЕЛЬНО):
+Вот список уже опубликованных статей в нашем блоге:
+${existingArticles}
+
+Правила внутренней перелинковки:
+- Вставь 2-4 ссылки на релевантные статьи из списка выше ЕСТЕСТВЕННО по тексту
+- Ссылки должны быть органичными: "как мы писали в статье [название](url)" или "подробнее об этом — в [название](url)"
+- НЕ ссылайся на статью, если она не связана с темой
+- НЕ вставляй все ссылки в одно место — распредели по тексту
+- Используй ТОЧНЫЕ URL из списка, не выдумывай\n`
+    : "";
 
   const prompt = `Ты автор блога SaaS-сервиса "Сабка" (sabka.pro) — мультичат для работы с ChatGPT, Claude, Gemini, DeepSeek без VPN.
 
@@ -37,7 +69,7 @@ ${SABKA_STYLE_GUIDE}
 - Используй ### (H3) для подсекций внутри H2
 - НИКОГДА не пропускай уровни (нет H3 без родительского H2)
 - Каждый H2 должен быть информативным, содержать ключевое слово
-
+${internalLinksBlock}
 КАРТИНКИ-МЕМЫ (ОБЯЗАТЕЛЬНО):
 Вставляй 4-6 мемных картинок по всей статье в формате:
 ![MEME: описание картинки на русском](placeholder)
