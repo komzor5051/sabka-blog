@@ -1,29 +1,27 @@
 import { GoogleGenAI } from "@google/genai";
 import { supabase } from "@/lib/supabase";
-import { slugify } from "@/lib/utils";
 
 const genAI = new GoogleGenAI({ apiKey: process.env.GOOGLE_AI_API_KEY! });
 
 const MEME_PLACEHOLDER_REGEX = /!\[MEME:\s*(.+?)\]\(placeholder\)/g;
 
-interface GeneratedImage {
-  url: string;
-  alt: string;
-}
-
 async function generateImage(prompt: string): Promise<Buffer> {
-  const response = await genAI.models.generateImages({
-    model: "imagen-4.0-generate-001",
-    prompt,
+  const response = await genAI.models.generateContent({
+    model: "gemini-2.5-flash-preview-05-20",
+    contents: prompt,
     config: {
-      numberOfImages: 1,
+      responseModalities: ["IMAGE", "TEXT"],
     },
   });
 
-  const imageData = response.generatedImages?.[0]?.image?.imageBytes;
-  if (!imageData) throw new Error("Imagen 4 returned no image");
+  const parts = response.candidates?.[0]?.content?.parts ?? [];
+  for (const part of parts) {
+    if (part.inlineData?.data) {
+      return Buffer.from(part.inlineData.data, "base64");
+    }
+  }
 
-  return Buffer.from(imageData, "base64");
+  throw new Error("Nano Banana returned no image");
 }
 
 async function uploadToStorage(
@@ -46,8 +44,8 @@ async function uploadToStorage(
   return data.publicUrl;
 }
 
-function buildImagenPrompt(russianDescription: string): string {
-  return `Digital illustration, modern flat style with vibrant colors. The scene: ${russianDescription}. NO text, NO letters, NO words on the image. Style: clean editorial illustration for a tech blog. High quality, 16:9 aspect ratio.`;
+function buildPrompt(description: string): string {
+  return `Generate an illustration for a tech blog article. The scene: ${description}. Style: modern, clean, professional editorial illustration. NO text, NO letters, NO words on the image. High quality, 16:9 aspect ratio.`;
 }
 
 export async function generateArticleImages(
@@ -71,27 +69,24 @@ export async function generateArticleImages(
 
   for (let i = 0; i < matches.length; i++) {
     const { full, description } = matches[i];
-    const imagenPrompt = buildImagenPrompt(description);
+    const prompt = buildPrompt(description);
 
     try {
       console.log(`[image-gen] Generating image ${i + 1}/${matches.length}: ${description.slice(0, 60)}...`);
-      const buffer = await generateImage(imagenPrompt);
+      const buffer = await generateImage(prompt);
       const url = await uploadToStorage(buffer, articleSlug, i + 1);
 
       if (i === 0) coverImage = url;
 
-      // Replace placeholder with real image
       const altText = description.trim();
       result = result.replace(full, `![${altText}](${url})`);
 
       console.log(`[image-gen] Image ${i + 1} uploaded: ${url}`);
     } catch (err) {
       console.error(`[image-gen] Failed to generate image ${i + 1}:`, err);
-      // Remove failed placeholder to not break the article
       result = result.replace(full, "");
     }
 
-    // Rate limiting: small delay between generations
     if (i < matches.length - 1) {
       await new Promise((resolve) => setTimeout(resolve, 2000));
     }
