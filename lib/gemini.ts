@@ -15,7 +15,14 @@ export async function generateText(
   });
 
   const result = await model.generateContent(prompt);
-  return result.response.text();
+  return stripCodeFence(result.response.text());
+}
+
+/** Strip wrapping ```markdown ... ``` that Gemini sometimes adds */
+function stripCodeFence(text: string): string {
+  const trimmed = text.trim();
+  const match = trimmed.match(/^```(?:markdown|md|html)?\s*\n([\s\S]*?)\n```\s*$/);
+  return match ? match[1] : trimmed;
 }
 
 export async function generatePro(prompt: string): Promise<string> {
