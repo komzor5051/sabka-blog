@@ -4,10 +4,10 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --accent: #22c55e;
-  --accent-hover: #16a34a;
-  --accent-light: #dcfce7;
-  --accent-dark: #166534;
+  --accent: #4AFFA4;
+  --accent-hover: #2ee88d;
+  --accent-light: #e6fff2;
+  --accent-dark: #0d7a42;
 }
 
 @theme inline {
@@ -24,7 +24,7 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
-    --accent-light: #052e16;
+    --accent-light: #0a2e1a;
   }
 }
 
