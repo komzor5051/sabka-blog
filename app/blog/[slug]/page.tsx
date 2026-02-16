@@ -103,7 +103,7 @@ export default async function ArticlePage({ params }: Props) {
             Блог
           </a>
           <span className="mx-2">/</span>
-          <span className="text-zinc-600 dark:text-zinc-300">{post.title}</span>
+          <span className="text-zinc-600 dark:text-zinc-300 truncate max-w-[200px] sm:max-w-none inline-block align-bottom">{post.title}</span>
         </nav>
 
         {/* Header */}
@@ -186,17 +186,20 @@ export default async function ArticlePage({ params }: Props) {
         </div>
       </article>
 
-      {/* JSON-LD: Article */}
+      {/* JSON-LD: BlogPosting */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "Article",
+            "@type": "BlogPosting",
             headline: post.title,
             description: post.meta_desc,
             datePublished: post.published_at,
             dateModified: post.published_at,
+            wordCount: post.content_md?.trim().split(/\s+/).length ?? 0,
+            inLanguage: "ru",
+            articleSection: (post.tags ?? [])[0] ?? "ИИ",
             keywords: (post.tags ?? []).join(", "),
             ...(post.cover_image && { image: post.cover_image }),
             author: {

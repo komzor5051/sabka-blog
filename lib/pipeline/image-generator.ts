@@ -86,6 +86,16 @@ export async function generateArticleImages(
     return { markdown, coverImage: null };
   }
 
+  // Cap at 3 images max
+  if (matches.length > 3) {
+    console.log(`[image-gen] Found ${matches.length} placeholders, limiting to 3`);
+    // Remove extra placeholders from markdown
+    for (let i = 3; i < matches.length; i++) {
+      markdown = markdown.replace(matches[i].full, "");
+    }
+    matches.length = 3;
+  }
+
   let result = markdown;
   let coverImage: string | null = null;
 

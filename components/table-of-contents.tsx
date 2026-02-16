@@ -90,22 +90,22 @@ export function TableOfContents({ html }: { html: string }) {
 
       {/* Desktop: sticky sidebar */}
       <nav
-        className="hidden lg:block sticky top-24 self-start w-64 shrink-0 max-h-[calc(100vh-8rem)] overflow-y-auto"
+        className="hidden lg:block sticky top-24 self-start w-52 shrink-0 max-h-[calc(100vh-8rem)] overflow-y-auto"
         aria-label="Оглавление"
       >
-        <p className="text-xs font-bold tracking-wider text-zinc-400 dark:text-zinc-500 uppercase mb-3">
+        <p className="text-[11px] font-bold tracking-wider text-zinc-400 dark:text-zinc-500 uppercase mb-2">
           Оглавление
         </p>
-        <ul className="space-y-1 border-l-2 border-zinc-200 dark:border-zinc-800">
+        <ul className="space-y-0.5 border-l border-zinc-200 dark:border-zinc-800">
           {items.map((item) => (
             <li key={item.id}>
               <a
                 href={`#${item.id}`}
-                className={`block py-1.5 text-sm transition-all border-l-2 -ml-[2px] ${
-                  item.level === 3 ? "pl-6" : "pl-4"
+                className={`block py-1 text-[13px] leading-snug transition-all border-l -ml-px ${
+                  item.level === 3 ? "pl-5" : "pl-3"
                 } ${
                   activeId === item.id
-                    ? "border-[var(--accent)] text-[var(--accent)] font-medium bg-[var(--accent-light)] rounded-r-md"
+                    ? "border-[var(--accent)] text-[var(--accent)] font-medium"
                     : "border-transparent text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 hover:border-zinc-400"
                 }`}
               >

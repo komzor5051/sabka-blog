@@ -11,12 +11,26 @@ interface PublishInput {
 }
 
 export async function publishPost(input: PublishInput): Promise<string> {
-  const slug = slugify(input.title);
+  // Shorten title if > 55 chars (SEO best practice)
+  let title = input.title;
+  if (title.length > 55) {
+    console.log(`[publisher] Title too long (${title.length} chars), shortening...`);
+    title = await generateFlash(
+      `Сократи заголовок статьи до 55 символов максимум, сохрани смысл и ключевые слова. Верни ТОЛЬКО заголовок, без кавычек и пояснений.\n\nЗаголовок: "${title}"`
+    );
+    title = title.trim().replace(/^["«]|["»]$/g, "");
+    if (title.length > 55) {
+      title = title.slice(0, 52) + "...";
+    }
+    console.log(`[publisher] Shortened title: "${title}" (${title.length} chars)`);
+  }
+
+  const slug = slugify(title);
   const contentHtml = renderMarkdown(input.content);
 
   // Generate meta description
   const metaDesc = await generateFlash(
-    `Напиши SEO мета-описание (РОВНО 150-155 символов) для статьи с заголовком "${input.title}". Только текст, без кавычек.`
+    `Напиши SEO мета-описание (РОВНО 150-155 символов) для статьи с заголовком "${title}". Только текст, без кавычек.`
   );
 
   const { data, error } = await supabase
@@ -24,7 +38,7 @@ export async function publishPost(input: PublishInput): Promise<string> {
     .insert({
       topic_id: input.topicId,
       slug,
-      title: input.title,
+      title,
       meta_desc: metaDesc.trim().slice(0, 160),
       content_md: input.content,
       content_html: contentHtml,
