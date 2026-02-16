@@ -2,6 +2,7 @@ import { supabase } from "@/lib/supabase";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { TableOfContents } from "@/components/table-of-contents";
+import { CopyableCode } from "@/components/copyable-code";
 
 export const revalidate = 60;
 
@@ -132,10 +133,7 @@ export default async function ArticlePage({ params }: Props) {
 
           {/* Article content */}
           <div className="min-w-0 flex-1">
-            <div
-              className="prose prose-zinc dark:prose-invert max-w-none prose-headings:font-bold prose-h2:text-2xl prose-h3:text-xl prose-a:text-[var(--accent)] dark:prose-a:text-[var(--accent)] prose-img:rounded-xl prose-img:shadow-md"
-              dangerouslySetInnerHTML={{ __html: contentHtml }}
-            />
+            <CopyableCode html={contentHtml} />
 
             {/* Prev/Next */}
             {(prev || next) && (

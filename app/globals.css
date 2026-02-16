@@ -61,6 +61,13 @@ body {
   text-decoration-color: var(--accent);
 }
 
+/* Code blocks: always show copy button on mobile (no hover) */
+@media (hover: none) {
+  .copy-btn {
+    opacity: 1 !important;
+  }
+}
+
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
