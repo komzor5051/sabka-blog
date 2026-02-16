@@ -67,10 +67,44 @@ ${content}
 }
 
 export async function runAllEditors(content: string): Promise<string> {
+  // Extract MEME placeholders before editing — LLMs often remove them despite instructions
+  const memeRegex = /!\[MEME:\s*.+?\]\(placeholder\)/g;
+  const memePlaceholders = content.match(memeRegex) ?? [];
+
   const roles: EditorRole[] = ["structure", "coherence", "anti-slop", "factcheck"];
   let result = content;
   for (const role of roles) {
     result = await editArticle(result, role);
   }
+
+  // Re-insert lost placeholders after H2 headings
+  if (memePlaceholders.length > 0) {
+    const surviving = (result.match(memeRegex) ?? []).length;
+    if (surviving < memePlaceholders.length) {
+      const lost = memePlaceholders.filter((p) => !result.includes(p));
+      const h2Positions: number[] = [];
+      const h2Regex = /^## .+$/gm;
+      let m;
+      while ((m = h2Regex.exec(result)) !== null) {
+        // Position right after the H2 line
+        const endOfLine = result.indexOf("\n", m.index + m[0].length);
+        if (endOfLine !== -1) h2Positions.push(endOfLine + 1);
+      }
+
+      // Distribute lost placeholders evenly across H2 positions
+      for (let i = 0; i < lost.length && i < h2Positions.length; i++) {
+        const posIndex = Math.floor((i / lost.length) * h2Positions.length);
+        const insertAt = h2Positions[posIndex];
+        result = result.slice(0, insertAt) + "\n" + lost[i] + "\n\n" + result.slice(insertAt);
+        // Shift remaining positions
+        const shift = lost[i].length + 3;
+        for (let j = posIndex + 1; j < h2Positions.length; j++) {
+          h2Positions[j] += shift;
+        }
+      }
+      console.log(`[editors] Re-inserted ${lost.length} lost MEME placeholders`);
+    }
+  }
+
   return result;
 }
