@@ -20,9 +20,8 @@ async function getExistingArticles(): Promise<string> {
 
   if (!data || data.length === 0) return "";
 
-  const blogUrl = process.env.BLOG_URL || "https://sabka-blog.vercel.app";
   return data
-    .map((p) => `- [${p.title}](${blogUrl}/blog/${p.slug})`)
+    .map((p) => `- [${p.title}](/blog/${p.slug})`)
     .join("\n");
 }
 
