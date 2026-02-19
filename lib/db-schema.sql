@@ -5,6 +5,7 @@ CREATE TABLE blog_topics (
   keywords    TEXT[] DEFAULT '{}',
   source      TEXT DEFAULT 'trend',
   score       INT DEFAULT 0,
+  search_volume INT DEFAULT 0,
   status      TEXT DEFAULT 'pending',
   created_at  TIMESTAMPTZ DEFAULT now(),
   used_at     TIMESTAMPTZ
